@@ -1,0 +1,499 @@
+<title>Kit de Marketing Educativo</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap">
+<style>
+/* Layout: encabezado + pestañas con desplazamiento horizontal + una columna de trabajo (dos columnas en escritorio). */
+:root {
+  --bg: #0F172A; --surface: #1E293B; --surface-2: #273449; --fg: #F8FAFC; --muted: #CBD5E1; --faint: #94A3B8;
+  --accent: #06B6D4; --accent-ink: #0F172A; --deep: #0E7490; --line: #334155;
+  --warn: #F59E0B; --good: #34D399; --bad: #F87171;
+  --font-head: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #F8FAFC; --surface: #FFFFFF; --surface-2: #EEF2F7; --fg: #0F172A; --muted: #334155; --faint: #64748B;
+    --accent: #0891B2; --accent-ink: #FFFFFF; --deep: #0E7490; --line: #CBD5E1;
+    --warn: #B45309; --good: #047857; --bad: #B91C1C; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #F8FAFC; --surface: #FFFFFF; --surface-2: #EEF2F7; --fg: #0F172A; --muted: #334155; --faint: #64748B;
+  --accent: #0891B2; --accent-ink: #FFFFFF; --deep: #0E7490; --line: #CBD5E1;
+  --warn: #B45309; --good: #047857; --bad: #B91C1C; color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --bg: #0F172A; --surface: #1E293B; --surface-2: #273449; --fg: #F8FAFC; --muted: #CBD5E1; --faint: #94A3B8;
+  --accent: #06B6D4; --accent-ink: #0F172A; --deep: #0E7490; --line: #334155;
+  --warn: #F59E0B; --good: #34D399; --bad: #F87171; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.55; padding-inline: 16px; padding-block: 24px 56px; }
+.wrap { max-width: 1040px; margin-inline: auto; }
+h1, h2, h3 { font-family: var(--font-head); font-weight: 800; line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.02rem; }
+p { margin: 0; }
+.eyebrow { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+header .lede { color: var(--muted); max-width: 62ch; margin-top: 8px; }
+header .meta { color: var(--faint); font-size: .85rem; margin-top: 10px; }
+nav { margin-top: 22px; display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; }
+nav button { flex: 0 0 auto; background: var(--surface); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px; font: 600 .88rem var(--font-body); cursor: pointer; }
+nav button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section.panel { margin-top: 22px; }
+section.panel[hidden] { display: none; }
+.panel-head { display: grid; gap: 6px; margin-bottom: 18px; }
+.panel-head p { color: var(--muted); max-width: 70ch; }
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; min-width: 0; display: grid; gap: 12px; align-content: start; }
+.card.accent { background: var(--deep); border-color: var(--deep); color: #F8FAFC; }
+.card.accent .hint, .card.accent label { color: #E2F5F9; }
+.hint { color: var(--faint); font-size: .84rem; }
+label { display: grid; gap: 5px; font-size: .86rem; font-weight: 600; color: var(--muted); min-width: 0; }
+input, textarea, select { width: 100%; background: var(--surface-2); color: var(--fg); border: 1px solid var(--line); border-radius: 9px; padding: 9px 11px; font: 400 .95rem var(--font-body); min-width: 0; }
+textarea { resize: vertical; min-height: 84px; }
+.row { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); }
+.btn { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 9px; padding: 9px 16px; font: 600 .88rem var(--font-body); cursor: pointer; justify-self: start; }
+.btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.promptbox { background: var(--surface-2); border: 1px dashed var(--accent); border-radius: 10px; padding: 12px 14px; font-size: .92rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.status { font-size: .84rem; color: var(--good); min-height: 1.2em; }
+.pill { display: inline-block; border-radius: 999px; padding: 3px 11px; font-size: .78rem; font-weight: 700; border: 1px solid currentColor; }
+.pill.good { color: var(--good); } .pill.warn { color: var(--warn); } .pill.bad { color: var(--bad); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; min-width: 640px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; font-size: .9rem; }
+th { color: var(--accent); font-size: .76rem; letter-spacing: .06em; text-transform: uppercase; }
+tr:last-child td { border-bottom: 0; }
+td input, td select { padding: 7px 9px; }
+.kpis { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); }
+.kpi { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; display: grid; gap: 2px; }
+.kpi span { font-size: .76rem; color: var(--faint); text-transform: uppercase; letter-spacing: .05em; }
+.kpi strong { font: 800 1.45rem var(--font-head); font-variant-numeric: tabular-nums; }
+.kpi.main { background: var(--deep); color: #F8FAFC; }
+.kpi.main span { color: #E2F5F9; }
+.progress { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .25s; }
+.checks { display: grid; gap: 8px; }
+.checks label { display: flex; align-items: center; gap: 10px; font-weight: 500; color: var(--fg); }
+.checks input { width: 18px; height: 18px; accent-color: var(--accent); flex: 0 0 auto; }
+ul.tips { margin: 0; padding-left: 18px; color: var(--muted); font-size: .88rem; display: grid; gap: 3px; }
+footer { margin-top: 36px; color: var(--faint); font-size: .8rem; max-width: 72ch; }
+@media (prefers-reduced-motion: reduce) { .progress i { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Charla para founders +EDU · 14 de octubre de 2026</div>
+    <h1>Kit de Marketing Educativo</h1>
+    <p class="lede">Seis herramientas para llevar a su startup: un lienzo del plan, un perfil de cliente ideal, un mapa de decisores, una matriz online/offline, una calculadora de CAC y LTV, y su ficha final. Todo lo que escriba se guarda solo en este navegador.</p>
+    <p class="meta">Mavy Gutiérrez · Board &amp; Strategic Advisor · Cifras en dólares (USD)</p>
+  </header>
+
+  <nav role="tablist" aria-label="Herramientas del kit" id="tabs"></nav>
+
+  <!-- 1. LIENZO -->
+  <section class="panel" id="p-lienzo" role="tabpanel" hidden>
+    <div class="panel-head">
+      <h2>Lienzo del plan de mercadeo</h2>
+      <p>Cinco bloques en una hoja. Si no puede llenar uno, ahí está su riesgo. Escriba una o dos frases por bloque.</p>
+      <div class="progress" aria-hidden="true"><i id="lienzoBar"></i></div>
+      <span class="hint" id="lienzoCount"></span>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>1. Descubrimiento externo</h3>
+        <label>¿Qué aprendí afuera?<textarea data-save id="l1" placeholder="Competidores, reseñas, tendencias, entrevistas con quien firma..."></textarea></label>
+        <ul class="tips"><li>Benchmark de competidores</li><li>Escucha digital: Google Trends, reseñas, comunidades, redes</li><li>Tradicional: entrevistas, encuestas, visitas, ferias</li></ul></div>
+      <div class="card"><h3>2. Diagnóstico interno</h3>
+        <label>¿Qué me impulsa y qué me frena?<textarea data-save id="l2" placeholder="Fortalezas y debilidades reales; amenazas del entorno..."></textarea></label>
+        <ul class="tips"><li>DOFA: debilidades, oportunidades, fortalezas, amenazas</li><li>PESTEL: político, económico, social, tecnológico, ecológico, legal</li><li>3C: compañía, cliente, competidor</li></ul></div>
+      <div class="card"><h3>3. ICP y posicionamiento</h3>
+        <label>¿A quién y con qué promesa?<textarea data-save id="l3" placeholder="Perfil de cliente ideal + la promesa atada a su miedo..."></textarea></label>
+        <p class="hint">ICP = <em>Ideal Customer Profile</em>, el perfil de cliente ideal. Use la pestaña ICP para armarlo.</p></div>
+      <div class="card"><h3>4. Mix: 4P o 7P</h3>
+        <label>Producto, precio, plaza y promoción<textarea data-save id="l4" placeholder="Qué vendo, a qué precio y con qué reglas de descuento, por qué canal, con qué mensaje..."></textarea></label>
+        <p class="hint">Si es un servicio, sume personas, procesos y evidencia física.</p></div>
+      <div class="card"><h3>5. Presupuesto y KPI</h3>
+        <label>¿Cuánto invierto y cómo sé que funciona?<textarea data-save id="l5" placeholder="Presupuesto mensual, CAC objetivo, LTV:CAC objetivo, métrica por etapa..."></textarea></label>
+        <p class="hint">Use la pestaña Números para calcular CAC, LTV y payback.</p></div>
+    </div>
+  </section>
+
+  <!-- 2. ICP -->
+  <section class="panel" id="p-icp" role="tabpanel" hidden>
+    <div class="panel-head">
+      <h2>ICP y posicionamiento</h2>
+      <p>El ICP (perfil de cliente ideal) describe el tipo de cliente al que más vale la pena venderle. Si todos son su cliente, nadie lo es.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Arme su ICP</h3>
+        <div class="row">
+          <label>Rol que decide<input data-save id="i_rol" placeholder="Vicerrector académico"></label>
+          <label>Tipo de institución<input data-save id="i_tipo" placeholder="Universidad privada mediana"></label>
+          <label>Ciudad o región<input data-save id="i_ciudad" placeholder="Lima"></label>
+        </div>
+        <label>Su miedo real<input data-save id="i_miedo" placeholder="Que los estudiantes de primer año abandonen"></label>
+        <label>Señal verificable que lo demuestra<input data-save id="i_senal" placeholder="Piloto de 4 semanas con 30% menos de abandono"></label>
+        <label>Sustituto que usa hoy (incluido no hacer nada)<input data-save id="i_sust" placeholder="Hojas de Excel y llamadas del coordinador"></label>
+        <label>Su propuesta en dos líneas<textarea data-save id="i_prop" placeholder="Ayudamos a [cliente] a [resultado] con [cómo]..."></textarea></label>
+      </div>
+      <div class="card accent"><h3>Su ICP en una frase</h3>
+        <p id="icpSentence"></p>
+        <button class="btn ghost" style="color:#F8FAFC;border-color:#F8FAFC" data-copy="icpSentence">Copiar frase</button>
+        <span class="status" data-status="icpSentence"></span>
+      </div>
+      <div class="card"><h3>Ejercicio con IA: el rector escéptico</h3>
+        <label>Rol del decisor
+          <select data-save id="i_decisor">
+            <option>vicerrector académico</option><option>rector</option><option>director de admisiones</option><option>director de tecnología</option><option>director financiero</option><option>decano</option>
+          </select></label>
+        <div class="promptbox" id="prompt1"></div>
+        <button class="btn" data-copy="prompt1">Copiar prompt</button>
+        <span class="status" data-status="prompt1"></span>
+        <p class="hint">Péguelo en su herramienta de IA. Anote las 3 objeciones y la evidencia que le piden, y comparta en el chat la que más le duele.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. DECISORES -->
+  <section class="panel" id="p-decisores" role="tabpanel" hidden>
+    <div class="panel-head">
+      <h2>Decisores y madurez del cliente</h2>
+      <p>El mismo producto se vende distinto según quién decide. Defina a cada persona y use la IA para anticipar su lenguaje.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Quién es quién</h3>
+        <label>Tipo de cliente<input data-save id="d_tipo" placeholder="Universidad privada de Lima"></label>
+        <label>Usuario (¿me sirve?)<input data-save id="d_u" placeholder="Estudiantes de primer año"></label>
+        <label>Influenciador (¿me deja bien?)<input data-save id="d_i" placeholder="Coordinador de bienestar"></label>
+        <label>Firmante (¿es seguro y se paga?)<input data-save id="d_f" placeholder="Vicerrector administrativo"></label>
+      </div>
+      <div class="card"><h3>Ejercicio con IA: objeciones por decisor</h3>
+        <div class="promptbox" id="prompt2"></div>
+        <button class="btn" data-copy="prompt2">Copiar prompt</button>
+        <span class="status" data-status="prompt2"></span>
+        <p class="hint">Quédese con la primera pregunta más fuerte y escríbala en su ficha.</p>
+      </div>
+      <div class="card"><h3>Madurez del cliente</h3>
+        <label>Nivel (1 reactivo a 5 inteligente)
+          <select data-save id="d_nivel">
+            <option value="1">1 · Reactivo</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 · Inteligente</option>
+          </select></label>
+        <p id="nivelTip"></p>
+        <p class="hint">Orientación general; ajústela a su cliente. Basada en un modelo de madurez de cinco niveles, de reactivo a inteligente.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. CANALES -->
+  <section class="panel" id="p-canales" role="tabpanel" hidden>
+    <div class="panel-head">
+      <h2>Matriz online / offline</h2>
+      <p>Defina qué canal usa en cada etapa y dónde se cierra la venta. Los canales precargados son ejemplos: adáptelos a su modelo.</p>
+    </div>
+    <div class="tablewrap" style="margin-bottom:16px">
+      <table>
+        <thead><tr><th>Etapa</th><th>Online</th><th>Offline</th><th>Peso</th></tr></thead>
+        <tbody id="matrix"></tbody>
+      </table>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Cuatro criterios para decidir</h3>
+        <label>Ticket<select data-save id="m_ticket"><option value="0">Bajo</option><option value="1">Alto</option></select></label>
+        <label>Ciclo de decisión<select data-save id="m_ciclo"><option value="0">Corto (días)</option><option value="1">Largo (meses)</option></select></label>
+        <label>Riesgo percibido<select data-save id="m_riesgo"><option value="0">Bajo</option><option value="1">Alto</option></select></label>
+        <label>Quién firma<select data-save id="m_firma"><option value="0">La persona</option><option value="1">Una institución</option></select></label>
+      </div>
+      <div class="card accent"><h3>Lectura sugerida</h3>
+        <p id="canalTip"></p>
+        <p class="hint">Criterio general, no una regla: pruébelo con sus datos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. NUMEROS -->
+  <section class="panel" id="p-numeros" role="tabpanel" hidden>
+    <div class="panel-head">
+      <h2>Calculadora de CAC y LTV</h2>
+      <p>Los valores precargados son un ejemplo ficticio en dólares. Si vende licencias a instituciones, use el ejemplo B2B: ingreso por año, 12 meses por periodo. Reemplácelos con los de su startup. El gasto administrativo no entra al CAC: va al margen.</p>
+      <div><button class="btn ghost" id="resetCalc">Ejemplo B2C (programa por semestre)</button> <button class="btn ghost" id="b2bCalc">Ejemplo B2B (licencia anual)</button></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Adquisición</h3>
+        <div class="row">
+          <label>Inversión en leads (USD)<input type="number" min="0" step="any" data-save data-calc id="c_leadsInv" value="8000"></label>
+          <label>Otro gasto de marketing, tecnología incluida (USD)<input type="number" min="0" step="any" data-save data-calc id="c_otroMkt" value="2000"></label>
+        </div>
+        <div class="row">
+          <label>Gasto de ventas: salarios, comisiones, infraestructura, licencias (USD)<input type="number" min="0" step="any" data-save data-calc id="c_ventasGasto" value="6000"></label>
+          <label>Leads generados<input type="number" min="0" step="any" data-save data-calc id="c_leads" value="1600"></label>
+        </div>
+        <label>Ventas (estudiantes o clientes nuevos)<input type="number" min="0" step="any" data-save data-calc id="c_ventas" value="20"></label>
+      </div>
+      <div class="card"><h3>Valor del cliente</h3>
+        <div class="row">
+          <label>Ingreso por periodo (USD)<input type="number" min="0" step="any" data-save data-calc id="c_ticket" value="3000"></label>
+          <label>Periodos del programa<input type="number" min="1" step="1" data-save data-calc id="c_periodos" value="2"></label>
+        </div>
+        <div class="row">
+          <label>% que continúa de un periodo al siguiente<input type="number" min="0" max="100" step="any" data-save data-calc id="c_perm" value="85"></label>
+          <label>Margen (%)<input type="number" min="0" max="100" step="any" data-save data-calc id="c_margen" value="40"></label>
+        </div>
+        <label>Meses por periodo<input type="number" min="1" step="any" data-save data-calc id="c_meses" value="6"></label>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px"><h3>Resultados</h3>
+      <div class="kpis">
+        <div class="kpi"><span>CPL</span><strong id="o_cpl">—</strong></div>
+        <div class="kpi"><span>Conversión</span><strong id="o_conv">—</strong></div>
+        <div class="kpi"><span>CAC de medios</span><strong id="o_cacm">—</strong></div>
+        <div class="kpi main"><span>CAC completo</span><strong id="o_cac">—</strong></div>
+        <div class="kpi"><span>Periodos esperados</span><strong id="o_per">—</strong></div>
+        <div class="kpi"><span>LTV</span><strong id="o_ltv">—</strong></div>
+        <div class="kpi main"><span>LTV : CAC</span><strong id="o_ratio">—</strong></div>
+        <div class="kpi"><span>Payback</span><strong id="o_pay">—</strong></div>
+      </div>
+      <div><span class="pill" id="o_pill"></span></div>
+      <p class="hint" id="o_note"></p>
+      <ul class="tips">
+        <li>CAC completo = (gasto de marketing + gasto de ventas) ÷ ventas.</li>
+        <li>LTV = ingreso por periodo × periodos esperados × margen. Con 2 periodos, periodos esperados = 1 + % que continúa.</li>
+        <li>Payback = CAC ÷ margen mensual. Supone cobro uniforme a lo largo del periodo.</li>
+        <li>Cada empresa define qué costos entran al CAC; lo importante es medirlo siempre igual.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6. FICHA -->
+  <section class="panel" id="p-ficha" role="tabpanel" hidden>
+    <div class="panel-head">
+      <h2>Su ficha de una página</h2>
+      <p>Seis minutos para salir con una decisión. Los campos de ICP y propuesta se llenan solos si ya los escribió en la pestaña ICP.</p>
+      <div class="progress" aria-hidden="true"><i id="fichaBar"></i></div>
+      <span class="hint" id="fichaCount"></span>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>1. ICP concreto</h3>
+        <label>Rol, tipo de institución, ciudad y miedo<textarea data-save id="f_icp" placeholder="Vicerrectores académicos de universidades privadas medianas en Lima con miedo a la deserción"></textarea></label>
+        <button class="btn ghost" id="fillIcp">Traer desde la pestaña ICP</button>
+      </div>
+      <div class="card"><h3>2. Promesa</h3>
+        <label>Atada a un miedo real<textarea data-save id="f_prom" placeholder="Reducimos el abandono del primer año..."></textarea></label>
+        <label>Señal verificable<input data-save id="f_senal" placeholder="Piloto con grupo de control"></label>
+      </div>
+      <div class="card"><h3>3. Experimento de 30 días</h3>
+        <label>Qué voy a probar<textarea data-save id="f_exp" placeholder="Enviar 40 propuestas a firmantes con piloto gratuito de 4 semanas"></textarea></label>
+        <div class="row">
+          <label>Métrica<input data-save id="f_met" placeholder="Reuniones con firmante"></label>
+          <label>Meta<input data-save id="f_meta" placeholder="8 reuniones"></label>
+          <label>Costo máximo (USD)<input data-save id="f_cost" placeholder="500"></label>
+        </div>
+        <label>Primera pregunta para el firmante<input data-save id="f_preg" placeholder="¿Qué le costaría a la universidad perder 100 estudiantes más este año?"></label>
+      </div>
+      <div class="card"><h3>Rúbrica</h3>
+        <div class="checks">
+          <label><input type="checkbox" data-save id="r1"> ¿Lo entiende un extraño en 20 segundos?</label>
+          <label><input type="checkbox" data-save id="r2"> ¿Se puede medir?</label>
+          <label><input type="checkbox" data-save id="r3"> ¿Se puede empezar el lunes?</label>
+        </div>
+        <button class="btn" id="copyFicha">Copiar mi ficha</button>
+        <span class="status" id="fichaStatus"></span>
+        <textarea id="fichaText" readonly hidden aria-label="Texto de su ficha" style="min-height:160px"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <footer>Material de apoyo de la charla “Marketing educativo para founders +EDU”. Los ejemplos numéricos son ficticios. Lo que usted escribe permanece en este navegador y no se envía a ningún servidor.</footer>
+</div>
+
+<script>
+(function () {
+  var TABS = [["lienzo", "Lienzo"], ["icp", "ICP"], ["decisores", "Decisores"], ["canales", "Online/offline"], ["numeros", "Números"], ["ficha", "Mi ficha"]];
+  var KEY = "kit-mkt-edu-v1";
+  var store = {};
+  function load() { try { store = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { store = {}; } }
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+  function $(id) { return document.getElementById(id); }
+  function val(id) { var el = $(id); return el ? (el.value || "").trim() : ""; }
+
+  /* ---------- pestañas ---------- */
+  var nav = $("tabs");
+  TABS.forEach(function (t) {
+    var b = document.createElement("button");
+    b.type = "button"; b.setAttribute("role", "tab"); b.id = "tab-" + t[0]; b.textContent = t[1];
+    b.addEventListener("click", function () { show(t[0]); });
+    nav.appendChild(b);
+  });
+  function show(key) {
+    TABS.forEach(function (t) {
+      $("p-" + t[0]).hidden = t[0] !== key;
+      $("tab-" + t[0]).setAttribute("aria-selected", t[0] === key ? "true" : "false");
+    });
+    try { history.replaceState(null, "", "#" + key); } catch (e) {}
+    try { localStorage.setItem(KEY + "-tab", key); } catch (e) {}
+  }
+
+  /* ---------- matriz ---------- */
+  var STAGES = [
+    ["Atracción", "Búsqueda, pauta, contenido", "Ferias, eventos", "0"],
+    ["Interés", "Redes y comunidades", "Visitas a colegios", "0"],
+    ["Consideración", "Webinars y reseñas", "Reuniones con decisores", "1"],
+    ["Contacto", "WhatsApp y formularios", "Llamadas", "1"],
+    ["Admisión", "Documentos en línea", "Atención presencial", "1"],
+    ["Matrícula", "Pago digital", "Firma o convenio", "2"],
+    ["Permanencia", "Seguimiento por mensajes", "Acompañamiento y comunidad", "1"]
+  ];
+  var PESO = ["Online", "Mixto", "Presencial"];
+  var tb = $("matrix");
+  STAGES.forEach(function (s, i) {
+    var tr = document.createElement("tr");
+    var opts = PESO.map(function (p, k) { return '<option value="' + k + '"' + (String(k) === s[3] ? " selected" : "") + ">" + p + "</option>"; }).join("");
+    tr.innerHTML = '<td><strong>' + s[0] + '</strong></td>' +
+      '<td><input data-save id="mx_on_' + i + '" value="' + s[1] + '" aria-label="Online, ' + s[0] + '"></td>' +
+      '<td><input data-save id="mx_off_' + i + '" value="' + s[2] + '" aria-label="Offline, ' + s[0] + '"></td>' +
+      '<td><select data-save id="mx_w_' + i + '" aria-label="Peso, ' + s[0] + '">' + opts + "</select></td>";
+    tb.appendChild(tr);
+  });
+
+  /* ---------- guardado ---------- */
+  load();
+  var fields = document.querySelectorAll("[data-save]");
+  fields.forEach(function (el) {
+    var v = store[el.id];
+    if (v !== undefined) { if (el.type === "checkbox") el.checked = !!v; else el.value = v; }
+    var ev = el.tagName === "SELECT" || el.type === "checkbox" ? "change" : "input";
+    el.addEventListener(ev, function () {
+      store[el.id] = el.type === "checkbox" ? el.checked : el.value; persist(); refresh();
+    });
+  });
+
+  /* ---------- cálculos ---------- */
+  function num(id) { var n = parseFloat(String($(id).value).replace(",", ".")); return isFinite(n) ? n : 0; }
+  function usd(n) { return "US$" + Math.round(n).toLocaleString("es-CO"); }
+  function dec(n, d) { return n.toLocaleString("es-CO", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function calc() {
+    var leadsInv = num("c_leadsInv"), otro = num("c_otroMkt"), gv = num("c_ventasGasto"), leads = num("c_leads"), ventas = num("c_ventas");
+    var ticket = num("c_ticket"), n = Math.max(1, Math.round(num("c_periodos"))), p = Math.min(1, Math.max(0, num("c_perm") / 100));
+    var m = Math.min(1, Math.max(0, num("c_margen") / 100)), meses = num("c_meses") || 1;
+    var mac = leadsInv + otro;
+    var cpl = leads > 0 ? leadsInv / leads : null;
+    var conv = leads > 0 ? ventas / leads : null;
+    var cacm = ventas > 0 ? mac / ventas : null;
+    var cac = ventas > 0 ? (mac + gv) / ventas : null;
+    var per = p >= 1 ? n : (1 - Math.pow(p, n)) / (1 - p);
+    var ltv = ticket * per * m;
+    var margenMes = ticket / meses * m;
+    var pay = cac !== null && margenMes > 0 ? cac / margenMes : null;
+    var ratio = cac !== null && cac > 0 ? ltv / cac : null;
+    return { cpl: cpl, conv: conv, cacm: cacm, cac: cac, per: per, ltv: ltv, ratio: ratio, pay: pay };
+  }
+  function renderCalc() {
+    var r = calc();
+    $("o_cpl").textContent = r.cpl === null ? "—" : "US$" + dec(r.cpl, 2);
+    $("o_conv").textContent = r.conv === null ? "—" : dec(r.conv * 100, 2) + "%";
+    $("o_cacm").textContent = r.cacm === null ? "—" : usd(r.cacm);
+    $("o_cac").textContent = r.cac === null ? "—" : usd(r.cac);
+    $("o_per").textContent = dec(r.per, 2);
+    $("o_ltv").textContent = usd(r.ltv);
+    $("o_ratio").textContent = r.ratio === null ? "—" : dec(r.ratio, 1);
+    $("o_pay").textContent = r.pay === null ? "—" : dec(r.pay, 1) + " meses";
+    var pill = $("o_pill"), note = $("o_note");
+    if (r.ratio === null) { pill.className = "pill"; pill.textContent = "Complete ventas y gastos"; note.textContent = ""; return; }
+    if (r.ratio >= 3) { pill.className = "pill good"; pill.textContent = "Sano: LTV:CAC de 3 o más"; note.textContent = "Cada dólar de adquisición devuelve al menos tres de margen. Revise que el payback le permita financiar el crecimiento."; }
+    else if (r.ratio >= 1) { pill.className = "pill warn"; pill.textContent = "Ajustado: LTV:CAC entre 1 y 3"; note.textContent = "Recupera el CAC, pero con poco margen de error y sin cubrir aún el gasto administrativo. Mejore conversión, permanencia o costo de ventas."; }
+    else { pill.className = "pill bad"; pill.textContent = "No recupera el CAC"; note.textContent = "El margen que deja cada cliente no alcanza a pagar su adquisición. Corrija antes de invertir más."; }
+  }
+  $("resetCalc").addEventListener("click", function () {
+    var d = { c_leadsInv: 8000, c_otroMkt: 2000, c_ventasGasto: 6000, c_leads: 1600, c_ventas: 20, c_ticket: 3000, c_periodos: 2, c_perm: 85, c_margen: 40, c_meses: 6 };
+    Object.keys(d).forEach(function (k) { $(k).value = d[k]; store[k] = String(d[k]); }); persist(); refresh();
+  });
+
+  $("b2bCalc").addEventListener("click", function () {
+    var d = { c_leadsInv: 6000, c_otroMkt: 2000, c_ventasGasto: 28000, c_leads: 120, c_ventas: 10, c_ticket: 7200, c_periodos: 3, c_perm: 85, c_margen: 70, c_meses: 12 };
+    Object.keys(d).forEach(function (k) { $(k).value = d[k]; store[k] = String(d[k]); }); persist(); refresh();
+  });
+
+  /* ---------- textos dinámicos ---------- */
+  function or(v, ph) { return v || ph; }
+  function renderText() {
+    var rol = or(val("i_rol"), "[rol que decide]"), tipo = or(val("i_tipo"), "[tipo de institución]"), ciudad = or(val("i_ciudad"), "[ciudad]"), miedo = or(val("i_miedo"), "[su miedo real]");
+    $("icpSentence").textContent = "Mi cliente ideal es " + rol + " de " + tipo + " en " + ciudad + ", cuyo miedo es " + miedo + ".";
+    $("prompt1").textContent = "Actúa como el " + val("i_decisor") + " de una universidad en Perú. Te voy a presentar mi solución EdTech: " + or(val("i_prop"), "[propuesta en 2 líneas]") + ". Dime las 3 objeciones más probables, qué evidencia me pedirías y qué te haría decir que no.";
+    $("prompt2").textContent = "Mi cliente es " + or(val("d_tipo"), "[tipo de institución]") + ". Los decisores son: usuario (" + or(val("d_u"), "[usuario]") + "), influenciador (" + or(val("d_i"), "[influenciador]") + ") y firmante (" + or(val("d_f"), "[firmante]") + "). Para cada uno dime qué le preocupa, qué lenguaje usa y cuál sería mi primera pregunta en una reunión. Entrégamelo en una tabla.";
+    var nivel = parseInt(val("d_nivel") || "1", 10);
+    var tips = {
+      1: "Venda la solución al problema de esta semana. Evite promesas de analítica avanzada; pida un caso pequeño y concreto.",
+      2: "Muestre un resultado simple y rápido. Acompañe con ejemplos de otras instituciones parecidas.",
+      3: "Proponga un piloto con métricas claras y un responsable del lado del cliente.",
+      4: "Hable de integración con sus sistemas, datos y tableros para el comité.",
+      5: "Hable de predicción, automatización y escala. El cliente ya piensa en datos."
+    };
+    $("nivelTip").textContent = tips[nivel];
+    var score = ["m_ticket", "m_ciclo", "m_riesgo", "m_firma"].reduce(function (a, id) { return a + parseInt(val(id) || "0", 10); }, 0);
+    $("canalTip").textContent = score <= 1
+      ? "Cierre online viable: atraiga, califique y cierre con formularios, WhatsApp y pago digital."
+      : score === 2
+        ? "Mixto: atraiga y califique online; cierre con una llamada o videollamada con quien decide."
+        : "Cierre presencial o con reunión directa: use lo online para atraer y calificar, y reserve el cierre para el contacto humano.";
+  }
+  function bar(ids, barId, countId, label) {
+    var filled = ids.filter(function (id) { var el = $(id); return el && (el.type === "checkbox" ? el.checked : el.value.trim().length > 0); }).length;
+    $(barId).style.width = Math.round(filled / ids.length * 100) + "%";
+    $(countId).textContent = filled + " de " + ids.length + " " + label;
+  }
+  function refresh() {
+    renderText(); renderCalc();
+    bar(["l1", "l2", "l3", "l4", "l5"], "lienzoBar", "lienzoCount", "bloques con contenido");
+    bar(["f_icp", "f_prom", "f_senal", "f_exp", "f_met", "f_meta", "f_cost", "f_preg"], "fichaBar", "fichaCount", "campos de la ficha completos");
+  }
+
+  /* ---------- copiar ---------- */
+  function copyText(text, statusEl, fallbackEl) {
+    function fallback() {
+      if (fallbackEl) { fallbackEl.hidden = false; fallbackEl.value = text; fallbackEl.focus(); fallbackEl.select(); }
+      statusEl.textContent = "No se pudo copiar solo. El texto quedó seleccionado: use Ctrl+C.";
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () { statusEl.textContent = "Copiado."; }, fallback);
+    } catch (e) { fallback(); }
+  }
+  document.querySelectorAll("[data-copy]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var id = b.getAttribute("data-copy"), st = document.querySelector('[data-status="' + id + '"]');
+      var el = $(id), sel = null;
+      copyText(el.textContent, st, null);
+      if (window.getSelection) { var r = document.createRange(); r.selectNodeContents(el); sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); }
+    });
+  });
+  $("fillIcp").addEventListener("click", function () {
+    var t = $("icpSentence").textContent;
+    $("f_icp").value = t; store.f_icp = t;
+    if (!$("f_prom").value && val("i_prop")) { $("f_prom").value = val("i_prop"); store.f_prom = val("i_prop"); }
+    if (!$("f_senal").value && val("i_senal")) { $("f_senal").value = val("i_senal"); store.f_senal = val("i_senal"); }
+    persist(); refresh();
+  });
+  $("copyFicha").addEventListener("click", function () {
+    var lines = [
+      "FICHA · Marketing educativo para founders +EDU",
+      "1. ICP concreto: " + val("f_icp"),
+      "2. Promesa: " + val("f_prom"),
+      "   Señal verificable: " + val("f_senal"),
+      "3. Experimento de 30 días: " + val("f_exp"),
+      "   Métrica: " + val("f_met") + " · Meta: " + val("f_meta") + " · Costo máximo: US$" + val("f_cost"),
+      "   Primera pregunta para el firmante: " + val("f_preg"),
+      "Rúbrica: " + ["r1", "r2", "r3"].filter(function (id) { return $(id).checked; }).length + " de 3 cumplidas"
+    ];
+    copyText(lines.join("\n"), $("fichaStatus"), $("fichaText"));
+  });
+
+  /* ---------- inicio ---------- */
+  var first = "lienzo", hash = (location.hash || "").replace("#", "");
+  var saved = ""; try { saved = localStorage.getItem(KEY + "-tab") || ""; } catch (e) {}
+  [hash, saved].some(function (k) { if (TABS.some(function (t) { return t[0] === k; })) { first = k; return true; } return false; });
+  refresh(); show(first);
+})();
+</script>
