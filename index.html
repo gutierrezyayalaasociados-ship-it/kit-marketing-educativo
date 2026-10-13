@@ -459,7 +459,7 @@ footer { margin-top: 36px; color: var(--faint); font-size: .8rem; max-width: 72c
   function renderText() {
     var rol = or(val("i_rol"), "[rol que decide]"), tipo = or(val("i_tipo"), "[tipo de institución]"), ciudad = or(val("i_ciudad"), "[ciudad]"), miedo = or(val("i_miedo"), "[su miedo real]");
     $("icpSentence").textContent = "Mi cliente ideal es " + rol + " de " + tipo + " en " + ciudad + ", cuyo miedo es " + miedo + ".";
-    $("prompt1").textContent = "Actúa como el " + val("i_decisor") + " de una universidad en Perú. Te voy a presentar mi solución EdTech: " + or(val("i_prop"), "[propuesta en 2 líneas]") + ". Dime las 3 objeciones más probables, qué evidencia me pedirías y qué te haría decir que no.";
+    $("prompt1").textContent = "Actúa como el " + val("i_decisor") + " de esta institución: " + tipo + ", en " + ciudad + ". Te voy a presentar mi solución EdTech: " + or(val("i_prop"), "[propuesta en 2 líneas]") + ". Dime las 3 objeciones más probables, qué evidencia me pedirías y qué te haría decir que no.";
     $("prompt2").textContent = "Mi cliente es " + or(val("d_tipo"), "[tipo de institución]") + ". Los decisores son: usuario (" + or(val("d_u"), "[usuario]") + "), influenciador (" + or(val("d_i"), "[influenciador]") + ") y firmante (" + or(val("d_f"), "[firmante]") + "). Para cada uno dime qué le preocupa, qué lenguaje usa y cuál sería mi primera pregunta en una reunión. Entrégamelo en una tabla.";
     var nivel = parseInt(val("d_nivel") || "1", 10);
     var tips = {
