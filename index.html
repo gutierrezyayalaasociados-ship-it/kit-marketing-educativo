@@ -53,6 +53,9 @@ section.panel[hidden] { display: none; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; min-width: 0; display: grid; gap: 12px; align-content: start; }
 .card.accent { background: var(--deep); border-color: var(--deep); color: #F8FAFC; }
 .card.accent .hint, .card.accent label { color: #E2F5F9; }
+.card.accent .kpi:not(.main) strong { color: var(--fg); }
+.card.accent .kpi:not(.main) span { color: var(--faint); }
+.card.accent .pill { background: var(--surface); }
 .hint { color: var(--faint); font-size: .84rem; }
 label { display: grid; gap: 5px; font-size: .86rem; font-weight: 600; color: var(--muted); min-width: 0; }
 input, textarea, select { width: 100%; background: var(--surface-2); color: var(--fg); border: 1px solid var(--line); border-radius: 9px; padding: 9px 11px; font: 400 .95rem var(--font-body); min-width: 0; }
@@ -272,7 +275,7 @@ footer { margin-top: 36px; color: var(--faint); font-size: .8rem; max-width: 72c
   <section class="panel" id="p-ficha" role="tabpanel" hidden>
     <div class="panel-head">
       <h2>Su ficha de una página</h2>
-      <p>Seis minutos para salir con una decisión. Los campos de ICP y propuesta se llenan solos si ya los escribió en la pestaña ICP.</p>
+      <p>Seis minutos para salir con una decisión. Al final, la ficha calcula sola su plan de 30 días: leads, inversión, CAC, LTV:CAC, payback y qué palanca mover primero.</p>
       <div class="progress" aria-hidden="true"><i id="fichaBar"></i></div>
       <span class="hint" id="fichaCount"></span>
     </div>
@@ -293,6 +296,40 @@ footer { margin-top: 36px; color: var(--faint); font-size: .8rem; max-width: 72c
           <label>Costo máximo (USD)<input data-save id="f_cost" placeholder="500"></label>
         </div>
         <label>Primera pregunta para el firmante<input data-save id="f_preg" placeholder="¿Qué le costaría a la universidad perder 100 estudiantes más este año?"></label>
+      </div>
+      <div class="card" style="grid-column:1/-1"><h3>4. Números del experimento</h3>
+        <p class="hint">Con estos datos, la ficha calcula sola su plan de 30 días. Si ya usó la pestaña Números, tráigalos de allí.</p>
+        <button class="btn ghost" id="fillNum">Traer desde la pestaña Números</button>
+        <div class="row">
+          <label>Meta: clientes nuevos en 30 días<input type="number" min="0" step="any" data-save id="p_meta" placeholder="10"></label>
+          <label>Conversión de lead a venta (%)<input type="number" min="0" step="any" data-save id="p_conv" placeholder="2"></label>
+          <label>Costo por lead, CPL (USD)<input type="number" min="0" step="any" data-save id="p_cpl" placeholder="5"></label>
+          <label>Otros gastos del mes: ventas y marketing sin leads (USD)<input type="number" min="0" step="any" data-save id="p_gv" placeholder="2000"></label>
+        </div>
+        <div class="row">
+          <label>Ingreso por periodo (USD)<input type="number" min="0" step="any" data-save id="p_ticket" placeholder="7200"></label>
+          <label>Periodos del contrato<input type="number" min="1" step="1" data-save id="p_per" placeholder="3"></label>
+          <label>% que continúa de un periodo al siguiente<input type="number" min="0" max="100" step="any" data-save id="p_perm" placeholder="85"></label>
+          <label>Margen (%)<input type="number" min="0" max="100" step="any" data-save id="p_marg" placeholder="70"></label>
+          <label>Meses por periodo<input type="number" min="1" step="any" data-save id="p_meses" placeholder="12"></label>
+        </div>
+      </div>
+      <div class="card accent" style="grid-column:1/-1"><h3>Su plan de 30 días, calculado</h3>
+        <div class="kpis">
+          <div class="kpi"><span>Leads necesarios</span><strong id="pl_leads">—</strong></div>
+          <div class="kpi"><span>Inversión total</span><strong id="pl_total">—</strong></div>
+          <div class="kpi"><span>CAC resultante</span><strong id="pl_cac">—</strong></div>
+          <div class="kpi"><span>LTV por cliente</span><strong id="pl_ltv">—</strong></div>
+          <div class="kpi main"><span>LTV : CAC</span><strong id="pl_ratio">—</strong></div>
+          <div class="kpi"><span>Payback</span><strong id="pl_pay">—</strong></div>
+          <div class="kpi"><span>Retorno de esta cohorte</span><strong id="pl_ret">—</strong></div>
+          <div class="kpi main"><span>Puntaje de la ficha</span><strong id="pl_score">0 / 100</strong></div>
+        </div>
+        <div><span class="pill" id="pl_pill"></span></div>
+        <p id="pl_budget" style="margin:0"></p>
+        <p id="pl_lever" style="margin:0"></p>
+        <p class="hint" id="pl_missing" style="margin:0"></p>
+        <p id="pl_summary" style="margin:0;white-space:pre-wrap"></p>
       </div>
       <div class="card"><h3>Rúbrica</h3>
         <div class="checks">
@@ -446,10 +483,76 @@ footer { margin-top: 36px; color: var(--faint); font-size: .8rem; max-width: 72c
     $(countId).textContent = filled + " de " + ids.length + " " + label;
   }
   function refresh() {
-    renderText(); renderCalc();
+    renderText(); renderCalc(); renderPlan();
     bar(["l1", "l2", "l3", "l4", "l5"], "lienzoBar", "lienzoCount", "bloques con contenido");
     bar(["f_icp", "f_prom", "f_senal", "f_exp", "f_met", "f_meta", "f_cost", "f_preg"], "fichaBar", "fichaCount", "campos de la ficha completos");
   }
+
+
+  /* ---------- plan de 30 días (ficha) ---------- */
+  function clamp01(x) { return Math.min(1, Math.max(0, x)); }
+  function evalPlan(meta, conv, cpl, gv, tk, n, p, m, meses) {
+    var leads = meta / conv, inv = leads * cpl, total = inv + gv, cac = total / meta;
+    var per = p >= 1 ? n : (1 - Math.pow(p, n)) / (1 - p);
+    var ltv = tk * per * m, mm = tk / meses * m;
+    return { leads: leads, inv: inv, total: total, cac: cac, per: per, ltv: ltv, ratio: cac > 0 ? ltv / cac : null, pay: mm > 0 ? cac / mm : null };
+  }
+  var TXT_IDS = ["f_icp", "f_prom", "f_senal", "f_exp", "f_met", "f_meta", "f_cost", "f_preg"];
+  var TXT_NAMES = { f_icp: "el ICP", f_prom: "la promesa", f_senal: "la señal verificable", f_exp: "el experimento", f_met: "la métrica", f_meta: "la meta", f_cost: "el costo máximo", f_preg: "la primera pregunta" };
+  var NUM_IDS = ["p_meta", "p_conv", "p_cpl", "p_gv", "p_ticket", "p_per", "p_perm", "p_marg", "p_meses"];
+  var planSummaryText = "";
+  function renderPlan() {
+    var set = function (id, v) { $(id).textContent = v; };
+    var tFilled = TXT_IDS.filter(function (id) { return val(id).length > 0; });
+    var nFilled = NUM_IDS.filter(function (id) { return val(id).length > 0; }).length;
+    var rub = ["r1", "r2", "r3"].filter(function (id) { return $(id).checked; }).length;
+    var score = Math.round(50 * tFilled.length / TXT_IDS.length + 15 * rub / 3 + 35 * nFilled / NUM_IDS.length);
+    set("pl_score", score + " / 100");
+    var miss = TXT_IDS.filter(function (id) { return !val(id); }).map(function (id) { return TXT_NAMES[id]; });
+    var missN = NUM_IDS.length - nFilled;
+    var parts = [];
+    if (miss.length) parts.push("Le falta completar " + miss.slice(0, 3).join(", ") + (miss.length > 3 ? " y " + (miss.length - 3) + " más" : "") + ".");
+    if (missN) parts.push("Faltan " + missN + " dato(s) numérico(s).");
+    if (rub < 3) parts.push("Responda la rúbrica: " + rub + " de 3.");
+    set("pl_missing", parts.join(" "));
+    var meta = num("p_meta"), conv = clamp01(num("p_conv") / 100), cpl = num("p_cpl"), gv = num("p_gv"), tk = num("p_ticket");
+    var n = Math.max(1, Math.round(num("p_per") || 1)), p = clamp01(num("p_perm") / 100), m = clamp01(num("p_marg") / 100), meses = num("p_meses") || 1;
+    var pill = $("pl_pill");
+    ["pl_leads", "pl_total", "pl_cac", "pl_ltv", "pl_ratio", "pl_pay", "pl_ret"].forEach(function (id) { set(id, "—"); });
+    set("pl_budget", ""); set("pl_lever", ""); set("pl_summary", ""); planSummaryText = "";
+    if (!(meta > 0 && conv > 0 && cpl > 0 && tk > 0 && m > 0)) { pill.className = "pill"; pill.textContent = "Complete meta, conversión, CPL, ingreso y margen"; return; }
+    var r = evalPlan(meta, conv, cpl, gv, tk, n, p, m, meses);
+    var ret = meta * r.ltv - r.total;
+    set("pl_leads", Math.ceil(r.leads).toLocaleString("es-CO"));
+    set("pl_total", usd(r.total)); set("pl_cac", usd(r.cac)); set("pl_ltv", usd(r.ltv));
+    set("pl_ratio", r.ratio === null ? "—" : dec(r.ratio, 1)); set("pl_pay", r.pay === null ? "—" : dec(r.pay, 1) + " meses");
+    set("pl_ret", (ret < 0 ? "-" : "") + usd(Math.abs(ret)));
+    if (r.ratio >= 3) { pill.className = "pill good"; pill.textContent = "Plan sano: LTV:CAC de 3 o más"; }
+    else if (r.ratio >= 1) { pill.className = "pill warn"; pill.textContent = "Plan ajustado: LTV:CAC entre 1 y 3"; }
+    else { pill.className = "pill bad"; pill.textContent = "El plan no recupera el CAC"; }
+    var cost = num("f_cost"), budgetMsg = "";
+    if (cost > 0) {
+      budgetMsg = r.total <= cost ? "Su costo máximo de " + usd(cost) + " alcanza: el plan usa " + usd(r.total) + "." : "Su costo máximo de " + usd(cost) + " no alcanza: el plan necesita " + usd(r.total) + " (faltan " + usd(r.total - cost) + "). Baje la meta o suba la conversión.";
+    }
+    set("pl_budget", budgetMsg);
+    var levers = [
+      { name: "subir la conversión 20%", r: evalPlan(meta, Math.min(1, conv * 1.2), cpl, gv, tk, n, p, m, meses) },
+      { name: "bajar el CPL 20%", r: evalPlan(meta, conv, cpl * 0.8, gv, tk, n, p, m, meses) },
+      { name: "subir la permanencia 10 puntos", r: evalPlan(meta, conv, cpl, gv, tk, n, clamp01(p + 0.1), m, meses) }
+    ].filter(function (l) { return l.r.ratio !== null && r.ratio !== null && l.r.ratio > r.ratio + 0.0001; });
+    levers.sort(function (a, b) { return b.r.ratio - a.r.ratio; });
+    var leverMsg = levers.length ? "Mueva primero: " + levers[0].name + ". Su LTV:CAC pasaría de " + dec(r.ratio, 1) + " a " + dec(levers[0].r.ratio, 1) + "." : "";
+    set("pl_lever", leverMsg);
+    planSummaryText = "Para lograr " + dec(meta, 0) + " clientes nuevos en 30 días con una conversión de " + dec(conv * 100, 1) + "% necesita unos " + Math.ceil(r.leads).toLocaleString("es-CO") + " leads. A US$" + dec(cpl, 2) + " por lead son " + usd(r.inv) + " en leads, más " + usd(gv) + " de otros gastos de ventas y marketing: " + usd(r.total) + " en total, un CAC de " + usd(r.cac) + ". Cada cliente deja un LTV de " + usd(r.ltv) + " (LTV:CAC " + dec(r.ratio, 1) + ", payback " + (r.pay === null ? "n/d" : dec(r.pay, 1) + " meses") + "). Retorno esperado de esta cohorte: " + (ret < 0 ? "-" : "") + usd(Math.abs(ret)) + "." + (leverMsg ? " " + leverMsg : "");
+    set("pl_summary", planSummaryText);
+  }
+  $("fillNum").addEventListener("click", function () {
+    var r = calc(), put = function (id, v) { if (v === null || !isFinite(v)) return; var s = String(Math.round(v * 100) / 100); $(id).value = s; store[id] = s; };
+    put("p_conv", r.conv === null ? null : r.conv * 100); put("p_cpl", r.cpl);
+    put("p_meta", num("c_ventas")); put("p_gv", num("c_ventasGasto") + num("c_otroMkt")); put("p_ticket", num("c_ticket")); put("p_per", num("c_periodos"));
+    put("p_perm", num("c_perm")); put("p_marg", num("c_margen")); put("p_meses", num("c_meses"));
+    persist(); refresh();
+  });
 
   /* ---------- copiar ---------- */
   function copyText(text, statusEl, fallbackEl) {
@@ -485,7 +588,9 @@ footer { margin-top: 36px; color: var(--faint); font-size: .8rem; max-width: 72c
       "3. Experimento de 30 días: " + val("f_exp"),
       "   Métrica: " + val("f_met") + " · Meta: " + val("f_meta") + " · Costo máximo: US$" + val("f_cost"),
       "   Primera pregunta para el firmante: " + val("f_preg"),
-      "Rúbrica: " + ["r1", "r2", "r3"].filter(function (id) { return $(id).checked; }).length + " de 3 cumplidas"
+      "Rúbrica: " + ["r1", "r2", "r3"].filter(function (id) { return $(id).checked; }).length + " de 3 cumplidas",
+      "Puntaje de la ficha: " + $("pl_score").textContent,
+      "PLAN DE 30 DÍAS (calculado): " + (planSummaryText || "complete los números del experimento para calcularlo.")
     ];
     copyText(lines.join("\n"), $("fichaStatus"), $("fichaText"));
   });
